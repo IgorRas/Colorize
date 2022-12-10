@@ -9,9 +9,47 @@ def select_image():
     return filename
 
 
+def select_type():
+    layout = [
+        [sg.Text('Typ:')],
+        [sg.Radio('AUTUMN ', "RADIO1", default=True),
+         sg.Radio('BONE', "RADIO1", default=False),
+         sg.Radio('JET', "RADIO1", default=False),
+         sg.Radio('WINTER', "RADIO1", default=False),
+         sg.Radio('RAINBOW', "RADIO1", default=False),
+         sg.Radio('OCEAN', "RADIO1", default=False),
+         sg.Radio('SUMMER', "RADIO1", default=False),
+         sg.Radio('SPRING', "RADIO1", default=False),
+         sg.Radio('COOL', "RADIO1", default=False),
+         sg.Radio('HSV', "RADIO1", default=False),
+         sg.Radio('PINK', "RADIO1", default=False),
+         sg.Radio('HOT', "RADIO1", default=False),
+         sg.Radio('PARULA', "RADIO1", default=False),
+         sg.Radio('MAGMA', "RADIO1", default=False),
+         sg.Radio('INFERNO', "RADIO1", default=False),
+         sg.Radio('PLASMA', "RADIO1", default=False),
+         sg.Radio('VIRIDIS', "RADIO1", default=False),
+         sg.Radio('CIVIDIS', "RADIO1", default=False),
+         sg.Radio('TWILIGHT', "RADIO1", default=False),
+         sg.Radio('TWILIGHT_SHIFTED', "RADIO1", default=False),
+         sg.Radio('TURBO', "RADIO1", default=False),
+         sg.Radio('DEEPGREEN', "RADIO1", default=False)],
+        [sg.Submit()]
+    ]
+    n_window = sg.Window('Podaj dane', layout)
+    event, values = n_window.read()
+    n_window.close()
+    return values
+
+
+values = select_type()
+value=0
+for i in range(21):
+    value += int(values[i])*i
+
 im_gray = cv2.imread(select_image(), cv2.IMREAD_GRAYSCALE)
 im_gray_3channel = cv2.cvtColor(im_gray, cv2.COLOR_GRAY2BGR)
-im_color = cv2.applyColorMap(im_gray, cv2.COLORMAP_RAINBOW)
+im_color = cv2.applyColorMap(im_gray, value)
 
 fin = np.concatenate((im_gray_3channel, im_color), axis=1)
 
