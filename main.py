@@ -1,71 +1,66 @@
 import cv2
-import sys
 import PySimpleGUI as sg
 import numpy as np
-import os
-from PIL import Image
+import sys
 
 
+# wybranie obrazu do obróbki
 def select_image():
     filename = sg.popup_get_file('file to open', no_window=True)
     return filename
 
 
-def images():
-    directory = 'images'
-    for filename in os.listdir(directory):
-        pathoriginal = os.path.join(directory, filename)
-        if os.path.isfile(pathoriginal):
-            if pathoriginal[-3:] == 'jpg':
-                os.remove(pathoriginal)
-
-
+# utworzenie ui do wybrania opcji oraz jej wybranie
 def select_type():
     layout = [
-        [sg.Text('Typ:')],
-        [sg.Radio('AUTUMN ', "RADIO1", default=True),
-         sg.Radio('BONE', "RADIO1", default=False),
-         sg.Radio('JET', "RADIO1", default=False),
-         sg.Radio('WINTER', "RADIO1", default=False),
-         sg.Radio('RAINBOW', "RADIO1", default=False),
-         sg.Radio('OCEAN', "RADIO1", default=False),
-         sg.Radio('SUMMER', "RADIO1", default=False),
-         sg.Radio('SPRING', "RADIO1", default=False),
-         sg.Radio('COOL', "RADIO1", default=False),
-         sg.Radio('HSV', "RADIO1", default=False),
-         sg.Radio('PINK', "RADIO1", default=False),
-         sg.Radio('HOT', "RADIO1", default=False),
-         sg.Radio('PARULA', "RADIO1", default=False),
-         sg.Radio('MAGMA', "RADIO1", default=False),
-         sg.Radio('INFERNO', "RADIO1", default=False),
-         sg.Radio('PLASMA', "RADIO1", default=False),
-         sg.Radio('VIRIDIS', "RADIO1", default=False),
-         sg.Radio('CIVIDIS', "RADIO1", default=False),
-         sg.Radio('TWILIGHT', "RADIO1", default=False),
-         sg.Radio('TWILIGHT_SHIFTED', "RADIO1", default=False),
-         sg.Radio('TURBO', "RADIO1", default=False),
-         sg.Radio('DEEPGREEN', "RADIO1", default=False)],
+        [[sg.Radio('AUTUMN ', "RADIO1", default=True, size=(15, 4)), sg.Image('images/colorscale_autumn.png')],
+         [sg.Radio('BONE', "RADIO1", default=False, size=(15, 4)), sg.Image('images/colorscale_bone.png')],
+         [sg.Radio('JET', "RADIO1", default=False, size=(15, 4)), sg.Image('images/colorscale_jet.png')],
+         [sg.Radio('WINTER', "RADIO1", default=False, size=(15, 4)), sg.Image('images/colorscale_winter.png')],
+         [sg.Radio('RAINBOW', "RADIO1", default=False, size=(15, 4)), sg.Image('images/colorscale_rainbow.png')],
+         [sg.Radio('OCEAN', "RADIO1", default=False, size=(15, 4)), sg.Image('images/colorscale_ocean.png')],
+         [sg.Radio('SUMMER', "RADIO1", default=False, size=(15, 4)), sg.Image('images/colorscale_summer.png')],
+         [sg.Radio('SPRING', "RADIO1", default=False, size=(15, 4)), sg.Image('images/colorscale_spring.png')],
+         [sg.Radio('COOL', "RADIO1", default=False, size=(15, 4)), sg.Image('images/colorscale_cool.png')],
+         [sg.Radio('HSV', "RADIO1", default=False, size=(15, 4)), sg.Image('images/colorscale_HSV.png')],
+         [sg.Radio('PINK', "RADIO1", default=False, size=(15, 4)), sg.Image('images/colorscale_pink.png')],
+         [sg.Radio('HOT', "RADIO1", default=False, size=(15, 4)), sg.Image('images/colorscale_hot.png')],
+         [sg.Radio('PARULA', "RADIO1", default=False, size=(15, 4)), sg.Image('images/colorscale_parula.png')],
+         [sg.Radio('MAGMA', "RADIO1", default=False, size=(15, 4)), sg.Image('images/colorscale_magma.png')],
+         [sg.Radio('INFERNO', "RADIO1", default=False, size=(15, 4)), sg.Image('images/colorscale_inferno.png')],
+         [sg.Radio('PLASMA', "RADIO1", default=False, size=(15, 4)), sg.Image('images/colorscale_plasma.png')],
+         [sg.Radio('VIRIDIS', "RADIO1", default=False, size=(15, 4)), sg.Image('images/colorscale_viridis.png')],
+         [sg.Radio('CIVIDIS', "RADIO1", default=False, size=(15, 4)), sg.Image('images/colorscale_cividis.png')],
+         [sg.Radio('TWILIGHT', "RADIO1", default=False, size=(15, 4)), sg.Image('images/colorscale_twilight.png')],
+         [sg.Radio('TWILIGHT_SHIFTED', "RADIO1", default=False, size=(15, 4)), sg.Image('images/colorscale_twilight_shifted.png')],
+         [sg.Radio('TURBO', "RADIO1", default=False, size=(15, 4)), sg.Image('images/colorscale_turbo.png')],
+         [sg.Radio('DEEPGREEN', "RADIO1", default=False, size=(15, 4)), sg.Image('images/colorscale_deepgreen.png')]],
         [sg.Submit()]
     ]
     n_window = sg.Window('Podaj dane', layout)
     event, values = n_window.read()
     n_window.close()
+    if values[0] is None:
+        sys.exit()
     return values
 
 
-images()
-values = select_type()
-value = 0
-for i in range(21):
-    value += int(values[i])*i
+# obróbka wybranego obrazu zgodnie z wybraną opcją
+def main():
+    values = select_type()
+    value = 0
+    for i in range(0, 42, 2):
+        value += int(int(values[i])*i/2)
 
-im_gray = cv2.imread(select_image(), cv2.IMREAD_GRAYSCALE)
-im_gray_3channel = cv2.cvtColor(im_gray, cv2.COLOR_GRAY2BGR)
-im_color = cv2.applyColorMap(im_gray, value)
+    im_gray = cv2.imread(select_image(), cv2.IMREAD_GRAYSCALE)
+    im_gray_3channel = cv2.cvtColor(im_gray, cv2.COLOR_GRAY2BGR)
+    im_color = cv2.applyColorMap(im_gray, value)
 
-fin = np.concatenate((im_gray_3channel, im_color), axis=1)
+    fin = np.concatenate((im_gray_3channel, im_color), axis=1)
+    return fin
 
+
+# wyświetlenie wyniku
 while True:
-    cv2.imshow("Result", fin)
+    cv2.imshow("Result", main())
     cv2.waitKey(0)
-    sys.exit()
