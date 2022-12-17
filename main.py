@@ -2,11 +2,22 @@ import cv2
 import sys
 import PySimpleGUI as sg
 import numpy as np
+import os
+from PIL import Image
 
 
 def select_image():
     filename = sg.popup_get_file('file to open', no_window=True)
     return filename
+
+
+def images():
+    directory = 'images'
+    for filename in os.listdir(directory):
+        pathoriginal = os.path.join(directory, filename)
+        if os.path.isfile(pathoriginal):
+            if pathoriginal[-3:] == 'jpg':
+                os.remove(pathoriginal)
 
 
 def select_type():
@@ -42,8 +53,9 @@ def select_type():
     return values
 
 
+images()
 values = select_type()
-value=0
+value = 0
 for i in range(21):
     value += int(values[i])*i
 
