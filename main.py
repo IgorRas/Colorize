@@ -52,11 +52,11 @@ def main():
     for i in range(0, 42, 2):
         value += int(int(values[i])*i/2)
 
-    im_gray = cv2.imread(select_image(), cv2.IMREAD_GRAYSCALE)
-    im_gray_3channel = cv2.cvtColor(im_gray, cv2.COLOR_GRAY2BGR)
-    im_color = cv2.applyColorMap(im_gray, value)
+    im_gray = cv2.imread(select_image(), cv2.IMREAD_GRAYSCALE) # początkowy wczytany obraz
+    im_gray_3channel = cv2.cvtColor(im_gray, cv2.COLOR_GRAY2BGR) # konwersja kopii oryginału na typ obrazu z trzema kanałami koloru
+    im_color = cv2.applyColorMap(im_gray, value) # koloryzacja zgodna z wybraną opcją
 
-    fin = np.concatenate((im_gray_3channel, im_color), axis=1)
+    fin = np.concatenate((im_gray_3channel, im_color), axis=1) # kolarz porównujący oryginał z koloryzowanym
     return fin
 
 
