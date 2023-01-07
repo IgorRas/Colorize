@@ -49,7 +49,7 @@ def select_type():
 def main():
     values = select_type()
     value = 0
-    for i in range(0, 42, 2):
+    for i in range(0, 44, 2):
         value += int(int(values[i])*i/2) # konwersja listy booli na liczbę odpowiadającej wybranej opcji
 
     im_gray = cv2.imread(select_image(), cv2.IMREAD_GRAYSCALE) # początkowy wczytany obraz
