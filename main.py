@@ -63,4 +63,5 @@ def main():
 # wyświetlenie wyniku
 while True:
     cv2.imshow("Result", main())
+    cv2.setWindowProperty("Result", cv2.WND_PROP_TOPMOST, 1)
     cv2.waitKey(0)
