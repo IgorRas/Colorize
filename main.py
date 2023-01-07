@@ -6,13 +6,13 @@ import sys
 
 # wybranie obrazu do obróbki
 def select_image():
-    filename = sg.popup_get_file('file to open', no_window=True)
+    filename = sg.popup_get_file('file to open', no_window=True) # ścieżka do wybranego obrazu
     return filename
 
 
 # utworzenie ui do wybrania opcji oraz jej wybranie
 def select_type():
-    layout = [
+    layout = [ # lista dostępnych opcji koloryzacji
         [[sg.Radio('AUTUMN ', "RADIO1", default=True, size=(15, 4)), sg.Image('images/colorscale_autumn.png')],
          [sg.Radio('BONE', "RADIO1", default=False, size=(15, 4)), sg.Image('images/colorscale_bone.png')],
          [sg.Radio('JET', "RADIO1", default=False, size=(15, 4)), sg.Image('images/colorscale_jet.png')],
@@ -42,7 +42,7 @@ def select_type():
     n_window.close()
     if values[0] is None:
         sys.exit()
-    return values
+    return values # zwraca wybraną listę booli z wartością 1 dla wybranej opcji
 
 
 # obróbka wybranego obrazu zgodnie z wybraną opcją
@@ -50,7 +50,7 @@ def main():
     values = select_type()
     value = 0
     for i in range(0, 42, 2):
-        value += int(int(values[i])*i/2)
+        value += int(int(values[i])*i/2) # konwersja listy booli na liczbę odpowiadającej wybranej opcji
 
     im_gray = cv2.imread(select_image(), cv2.IMREAD_GRAYSCALE) # początkowy wczytany obraz
     im_gray_3channel = cv2.cvtColor(im_gray, cv2.COLOR_GRAY2BGR) # konwersja kopii oryginału na typ obrazu z trzema kanałami koloru
